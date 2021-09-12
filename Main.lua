@@ -20,6 +20,29 @@ mainModule.colourScheme = {
 	["hover"]     = Color3.fromRGB(252, 3, 102)
 }
 
+mainModule.doRainbowHover = true
+mainModule.doRainbowText = true
+mainModule.texts = {}
+spawn(function()
+	local tick = tick
+	local fromHSV = Color3.fromHSV
+	local RunService = game:GetService("RunService")
+	local t = 5
+
+	RunService:BindToRenderStep("Rainbow", 1000, function()
+		local hue = tick() % t / t
+		local color = fromHSV(hue, 1, 1)
+		if mainModule.doRainbowHover then
+			mainModule.colourScheme.hover = color
+		end
+		if mainModule.doRainbowText then
+			for index,text in pairs(mainModule.texts) do
+				text.TextColor3 = color
+			end
+		end
+	end)
+end)
+
 mainModule.Create = function(title, player)
 	if game:GetService("RunService"):IsServer() and not player then error("When initializing a new LanjtUI UI on the server, a player parameter must be specified.") end
 	if game:GetService("RunService"):IsClient() and player then player = nil warn("A player parameter was specified on LanjtUI intiialization, but it will not be used because script is running on the client.") end
@@ -85,6 +108,7 @@ mainModule.Create = function(title, player)
 	UILL.VerticalAlignment = Enum.VerticalAlignment.Top
 	titleText = Instance.new("TextButton")
 	doProtect(titleText)
+	table.insert(mainModule.texts,titleText)
 	titleText.Name = "Title"
 	titleText.Parent = sidebar
 	titleText.Text = title
@@ -114,6 +138,7 @@ mainModule.Create = function(title, player)
 		wait(.1)
 		local titleText = Instance.new("TextButton")
 		doProtect(titleText)
+		table.insert(mainModule.texts,titleText)
 		titleText.Parent = sidebar
 		titleText.Text = re.title.."\n"..re.description
 		titleText.Size = UDim2.new(1, 0,0.05, 0)
