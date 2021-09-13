@@ -23,6 +23,11 @@ mainModule.colourScheme = {
 mainModule.doRainbowHover = true
 mainModule.doRainbowText = true
 mainModule.texts = {}
+
+function mainModule:ToggleRainbow()
+	mainModule.doRainbowHover = not mainModule.doRainbowHover
+	mainModule.doRainbowText = not mainModule.doRainbowText
+end
 spawn(function()
 	local tick = tick
 	local fromHSV = Color3.fromHSV
